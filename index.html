@@ -8,26 +8,47 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.6.0/redux.js" type="text/javascript"></script>
 </head>
 <body>
-  <div id="root"/>
-  <script type="text/javascript">
-    const TemperatureWidget = React.createClass({
-        propTypes: {
-          zip: React.PropTypes.string.isRequired
-        },
+<div id="root"/>
+<script type="text/javascript">
+  const TemperatureWidget = React.createClass({
+    propTypes: {
+      zip: React.PropTypes.string.isRequired
+    },
 
-        render: function() {
-          return React.createElement('div', {}, this.props.zip);
-        }
-    });
+    getInitialState: function () {
+      return {
+        temperature: "F* Cold!"
+      }
+    },
+
+    componentDidMount: function () {
+      fetch("http://api.openweathermap.org/data/2.5/weather?zip=" + this.props.zip + ",us&units=imperial&APPID=5da3194d0be639167f896d94e7c2d13c")
+          .then((response) => {
+            response.json().then((json) => {
+                  this.setState({
+                    temperature: json.main.temp
+                  })
+                }
+            )
+          });
+    },
+
+    render: function () {
+      return React.createElement('span', {},
+          React.createElement('div', {}, "Zip: " + this.props.zip),
+          React.createElement('div', {}, "Temperature: " + this.state.temperature)
+      );
+    }
+  });
 
 
-    var rootElement = React.createElement('div', {},
+  var rootElement = React.createElement('div', {},
       React.createElement('h1', {}, "Weather NOW!"),
       React.createElement(TemperatureWidget, {zip: "80528"})
-    );
-    ReactDOM.render(rootElement, document.getElementById('root'));
+  );
+  ReactDOM.render(rootElement, document.getElementById('root'));
 
-    //let apiUrl = http://api.openweathermap.org/data/2.5/weather?zip=94040,us&APPID=5da3194d0be639167f896d94e7c2d13c
-  </script>
+  //let apiUrl = http://api.openweathermap.org/data/2.5/weather?zip=94040,us&APPID=5da3194d0be639167f896d94e7c2d13c
+</script>
 </body>
 </html>
