@@ -10,7 +10,21 @@
 <body>
   <div id="root"/>
   <script type="text/javascript">
-    var rootElement = React.createElement('h1', {}, "Hello React");
+    const TemperatureWidget = React.createClass({
+        propTypes: {
+          zip: React.PropTypes.string.isRequired
+        },
+
+        render: function() {
+          return React.createElement('div', {}, this.props.zip);
+        }
+    });
+
+
+    var rootElement = React.createElement('div', {},
+      React.createElement('h1', {}, "Weather NOW!"),
+      React.createElement(TemperatureWidget, {zip: "80528"})
+    );
     ReactDOM.render(rootElement, document.getElementById('root'));
 
     //let apiUrl = http://api.openweathermap.org/data/2.5/weather?zip=94040,us&APPID=5da3194d0be639167f896d94e7c2d13c
